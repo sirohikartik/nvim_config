@@ -60,6 +60,16 @@ require("lazy").setup({
         vim.cmd.colorscheme("carbonfox")
     end,
 },
+
+{
+  "sphamba/smear-cursor.nvim",
+  opts = {
+    stiffness = 0.8,
+    trailing_stiffness = 0.5,
+    damping = 0.65,
+  },
+}
+,
     {
         "nvim-tree/nvim-tree.lua",
         dependencies = { "nvim-tree/nvim-web-devicons" },
