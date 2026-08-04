@@ -13,10 +13,8 @@ vim.opt.scrolloff = 8
 vim.opt.clipboard = "unnamedplus"
 
 vim.g.mapleader = " "
-
-vim.api.nvim_set_hl(0, "Normal", { bg = "#000000" })
-vim.api.nvim_set_hl(0, "NormalNC", { bg = "#000000" })
-vim.api.nvim_set_hl(0, "NormalFloat", { bg = "#000000" })
+vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
+vim.api.nvim_set_hl(0, "NormalNC", { bg = "none" })
 
 --------------------------------------------------
 -- KEYMAPS
@@ -57,7 +55,23 @@ end
 
 vim.opt.rtp:prepend(lazypath)
 
+
 require("lazy").setup({
+
+  {
+    "carderne/pi-nvim",
+    config = function()
+        require("pi-nvim").setup({
+            set_default_keymaps = false,
+        })
+
+        vim.keymap.set("n", "<leader>pp", ":PiSend<CR>")
+        vim.keymap.set("n", "<leader>pf", ":PiSendFile<CR>")
+        vim.keymap.set("v", "<leader>ps", ":PiSendSelection<CR>")
+        vim.keymap.set("n", "<leader>pb", ":PiSendBuffer<CR>")
+        vim.keymap.set("n", "<leader>pi", ":PiPing<CR>")
+    end,
+},
 
     --------------------------------------------------
     -- THEME
@@ -97,7 +111,7 @@ require("lazy").setup({
         },
     },
 
-    --------------------------------------------------
+      --------------------------------------------------
     -- FILE TREE
     --------------------------------------------------
 
@@ -155,22 +169,37 @@ require("lazy").setup({
         end,
     },
 
+
+
+
+   {
+    'MeanderingProgrammer/render-markdown.nvim',
+    dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-mini/mini.nvim' },            -- if you use the mini.nvim suite
+    -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-mini/mini.icons' },        -- if you use standalone mini plugins
+    -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' }, -- if you prefer nvim-web-devicons
+    ---@module 'render-markdown'
+    ---@type render.md.UserConfig
+    opts = {},
+},
     --------------------------------------------------
     -- LSP
     --------------------------------------------------
+{
+    "neovim/nvim-lspconfig",
+    config = function()
+        -- C++
+        vim.lsp.config("clangd", {})
+        vim.lsp.enable("clangd")
 
-    {
-        "neovim/nvim-lspconfig",
-        config = function()
-            vim.lsp.config("clangd", {})
-            vim.lsp.config("basedpyright", {})
-
-            vim.lsp.enable("clangd")
-            vim.lsp.enable("basedpyright")
-        end,
-    },
-
-    --------------------------------------------------
+        -- Python
+        vim.lsp.config("basedpyright", {
+            handlers = {
+                ["textDocument/publishDiagnostics"] = function() end,
+            },
+        })
+        vim.lsp.enable("basedpyright")
+    end,
+},    --------------------------------------------------
     -- AUTOCOMPLETE
     --------------------------------------------------
 
@@ -200,6 +229,26 @@ require("lazy").setup({
         end,
     },
 
+
+    {
+    "kawre/leetcode.nvim",
+    cmd = "Leet",
+    dependencies = {
+        "nvim-lua/plenary.nvim",
+        "MunifTanjim/nui.nvim",
+    },
+    opts = {
+        lang = "cpp",
+
+        plugins = {
+            non_standalone = true,
+        },
+
+        picker = {
+            provider = "telescope",
+        },
+    },
+},
     --------------------------------------------------
     -- TELESCOPE
     --------------------------------------------------
@@ -232,5 +281,11 @@ require("lazy").setup({
             )
         end,
     },
-
 })
+
+
+vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
+vim.api.nvim_set_hl(0, "NormalNC", { bg = "none" })
+vim.api.nvim_set_hl(0, "SignColumn", { bg = "none" })
+vim.api.nvim_set_hl(0, "EndOfBuffer", { bg = "none" })
+vim.api.nvim_set_hl(0, "LineNr", { bg = "none" })
